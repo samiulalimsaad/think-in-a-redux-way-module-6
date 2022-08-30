@@ -18,34 +18,40 @@ export default function Video() {
 
     useEffect(() => {
         dispatch(getVideo(id));
-    }, []);
+    }, [id]);
+
+    let content = null;
 
     if (isLoading) {
-        return <Loading />;
+        content = <Loading />;
     }
 
     if (!isLoading && isError) {
-        return <div className="col-span-12 text-center">{error}</div>;
+        content = <div className="col-span-12 text-center">{error}</div>;
     }
 
     if (!isLoading && !isError && !video?.id) {
-        return <div className="col-span-12 text-center">No Content</div>;
+        content = <div className="col-span-12 text-center">No Content</div>;
     }
 
-    if (!isLoading && !isError && video?.id)
-        return (
-            <section className="pt-6 pb-20">
-                <div className="mx-auto max-w-7xl px-2 pb-20 min-h-[400px]">
-                    <div className="grid grid-cols-3 gap-2 lg:gap-8">
-                        <div className="col-span-full w-full space-y-8 lg:col-span-2">
-                            <VideoPlayer video={video} />
+    if (!isLoading && !isError && video?.id) {
+        content = (
+            <>
+                <div className="col-span-full w-full space-y-8 lg:col-span-2">
+                    <VideoPlayer video={video} />
 
-                            <VideoDescription video={video} />
-                        </div>
-
-                        <RelatedVideoList />
-                    </div>
+                    <VideoDescription video={video} />
                 </div>
-            </section>
+
+                <RelatedVideoList id={video.id} tags={video.tags} />
+            </>
         );
+    }
+    return (
+        <section className="pt-6 pb-20">
+            <div className="mx-auto max-w-7xl px-2 pb-20 min-h-[400px]">
+                <div className="grid grid-cols-3 gap-2 lg:gap-8">{content}</div>
+            </div>
+        </section>
+    );
 }
