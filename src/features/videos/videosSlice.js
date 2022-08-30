@@ -10,7 +10,7 @@ const initialState = {
 
 export const getVideos = createAsyncThunk(
     "videos/fetchVideos",
-    async () => await fetchVideos()
+    async (params) => await fetchVideos(params)
 );
 
 const videosSlice = createSlice({
